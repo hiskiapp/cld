@@ -15,11 +15,11 @@ Caledi is a cassava leaf disease classificator. It uses machine learning to clas
 2. Upload an image of a cassava leaf.
 3. The application will classify the disease present in the leaf.
 
-## Development
+## Running the Application
 
-To start development, run the following command:
+To start the application, run the following commands:
 
 ```sh
-npm install
-npm run dev
+bun install
+bun run dev
 ```
