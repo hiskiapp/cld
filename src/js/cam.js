@@ -30,7 +30,7 @@ document.addEventListener('alpine:init', () => {
       return "android";
     },
 
-    async setupCamera(facingMode = 'user') {
+    async setupCamera(facingMode = 'environment') {
       if (this.checkDevice() == 'android') {
         await this.setupCameraAndroid(facingMode);
       } else {
@@ -106,15 +106,22 @@ document.addEventListener('alpine:init', () => {
       if (url) {
         try {
           const response = await fetch(url)
+          if (!response.ok) {
+            alert('Image not found or not valid')
+            return
+          }
           const blob = await response.blob()
           this.base64image = await this.readFileAsDataURL(blob)
           await this.predict(this.getBase64Image())
         } catch (error) {
-          console.error(error)
+          if (error.name === 'TypeError' && error.message === 'Failed to fetch') {
+            alert('CORS error: Make sure the image URL allows cross-origin requests')
+          } else {
+            console.error(error)
+          }
         }
       }
     },
-
     captureVideoFrame() {
       const canvas = document.createElement('canvas')
       canvas.width = this.video.videoWidth

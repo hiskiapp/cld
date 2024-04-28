@@ -31,17 +31,19 @@
 
     <header class="flex flex-col items-center justify-between my-5 lg:flex-row">
 
-      <div class="flex items-center justify-between w-full lg:w-auto">
-        <a href="/" class="text-lg"><span class="font-bold text-slate-800">Cale</span><span
-            class="text-slate-500">di</span>
+      <div class="flex items-center justify-between w-full lg:justify-start">
+        <a href="/" class="mx-auto lg:mx-0 text-lg">
+          <span class="font-bold text-slate-800">Cale</span>
+          <span class="text-slate-500">Di</span>
         </a>
       </div>
+
     </header>
 
   </div>
 
   <div class="max-w-screen-xl px-5 mx-auto" x-data="cam">
-    <main class="grid pt-16 pb-4 lg:grid-cols-1 place-items-center md:pt-12 md:pb-8">
+    <main class="grid pt-16 pb-4 lg:grid-cols-1 place-items-center md:pt-12 md:pb-16" x-show="!started">
       <div>
         <h1 class="text-3xl font-bold text-center md:text-5xl lg:text-6xl xl:text-7xl">
           Cassava Leaf Disease Classificator
@@ -72,9 +74,8 @@
         </div>
       </div>
     </main>
-    <div x-show="!started">
-    </div>
-    <div class="flex flex-col items-center max-w-5xl p-8 mx-auto mt-20 text-center bg-black rounded-lg" x-transition
+
+    <div class="flex flex-col items-center max-w-5xl p-8 mx-auto mt-10 text-center bg-black rounded-lg" x-transition
       :class="{'md:px-2 md:py-10': started, 'md:px-20 md:py-20': !started}">
       <h2 class="text-4xl tracking-tight text-white md:text-6xl" x-show="!started">
         Accuracy up to 85%
@@ -94,87 +95,108 @@
         <video id="main-cam" class="w-full rounded-lg z-100" x-show="!finished"></video>
         <img :src="base64image" class="w-full rounded-lg z-100" x-show="finished" />
         <div class="pt-6 mx-auto mt-2 text-center" x-show="!processing && !finished">
-          <div class="flex flex-col items-center space-y-3 sm:flex-row sm:space-y-0 sm:space-x-3">
-            <button @click="switchCamera"
-              class="text-white hover:bg-white hover:text-black border border-white focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Switch
-              Camera</button>
-            <button type="button"
+          <div class="flex flex-row items-center space-x-3 justify-center">
+            <button title="Switch Camera" @click="switchCamera"
+              class="text-white hover:bg-white hover:text-black border border-white focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                stroke="currentColor" class="w-6 h-6">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M7.5 21 3 16.5m0 0L7.5 12M3 16.5h13.5m0-13.5L21 7.5m0 0L16.5 12M21 7.5H7.5" />
+              </svg>
+
+            </button>
+            <button title="Submit Photo" type="button"
               class="text-white hover:bg-white hover:text-black border border-white focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
-              @click="submit">Submit</button>
+              @click="submit">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                stroke="currentColor" class="w-6 h-6">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0 1 3.27 20.875L5.999 12Zm0 0h7.5" />
+              </svg>
+            </button>
             <input type="file" name="image" id="image" class="hidden" accept="image/*" @change="upload" />
-            <label for="image"
-              class="text-white hover:bg-white hover:text-black border border-white focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center cursor-pointer">Upload
-              Image</label>
-            <button @click="urlfile"
-              class="text-white hover:bg-white hover:text-black border border-white focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Upload
-              Image via URL</button>
+            <label title="Upload From Gallery" for="image"
+              class="text-white hover:bg-white hover:text-black border border-white focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center cursor-pointer"><svg
+                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                stroke="currentColor" class="w-6 h-6">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M9 8.25H7.5a2.25 2.25 0 0 0-2.25 2.25v9a2.25 2.25 0 0 0 2.25 2.25h9a2.25 2.25 0 0 0 2.25-2.25v-9a2.25 2.25 0 0 0-2.25-2.25H15m0-3-3-3m0 0-3 3m3-3V15" />
+              </svg>
+            </label>
+            <button title="Upload Via URL" @click="urlfile"
+              class="text-white hover:bg-white hover:text-black border border-white focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                stroke="currentColor" class="w-6 h-6">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M13.19 8.688a4.5 4.5 0 0 1 1.242 7.244l-4.5 4.5a4.5 4.5 0 0 1-6.364-6.364l1.757-1.757m13.35-.622 1.757-1.757a4.5 4.5 0 0 0-6.364-6.364l-4.5 4.5a4.5 4.5 0 0 0 1.242 7.244" />
+              </svg>
+            </button>
           </div>
         </div>
       </div>
     </div>
-  </div>
 
-  <div
-    class="flex flex-col items-center max-w-5xl p-8 mx-auto mt-20 text-center bg-white border-2 border-black rounded-lg"
-    x-show="finished">
-    <h2 class="text-4xl tracking-tight text-black md:text-6xl">
-      Result
-    </h2>
-    <div class="flex mt-5" x-show="!is_unknown">
-      <table class="max-w-5xl mx-auto table-auto">
-        <thead>
-          <tr>
-            <th class="px-4 py-2 text-black">Disease</th>
-            <th class="px-4 py-2 text-black">Accuracy</th>
-          </tr>
-        </thead>
-        <tbody>
-          <template x-for="prediction in predictions" :key="prediction.disease">
+    <div
+      class="flex flex-col items-center max-w-5xl p-8 mx-auto mt-10 text-center bg-white border-2 border-black rounded-lg"
+      x-show="finished">
+      <h2 class="text-4xl tracking-tight text-black md:text-6xl">
+        Result
+      </h2>
+      <div class="flex mt-5" x-show="!is_unknown">
+        <table class="max-w-5xl mx-auto table-auto">
+          <thead>
             <tr>
-              <td class="px-4 py-2 text-black border border-black" :class="{'font-bold': prediction.is_max}"
-                x-text="prediction.disease"></td>
-              <td class="px-4 py-2 text-black border border-black" :class="{'font-bold': prediction.is_max}"
-                x-text="prediction.accuracy"></td>
+              <th class="px-4 py-2 text-black">Disease</th>
+              <th class="px-4 py-2 text-black">Accuracy</th>
             </tr>
-          </template>
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            <template x-for="prediction in predictions" :key="prediction.disease">
+              <tr>
+                <td class="px-4 py-2 text-black border border-black" :class="{'font-bold': prediction.is_max}"
+                  x-text="prediction.disease"></td>
+                <td class="px-4 py-2 text-black border border-black" :class="{'font-bold': prediction.is_max}"
+                  x-text="prediction.accuracy"></td>
+              </tr>
+            </template>
+          </tbody>
+        </table>
+      </div>
+
+      <div x-show="is_unknown" class="mt-5">
+        <p class="text-xl font-bold text-black">We can't detect the disease. Please try again. Make sure the image is
+          clear and the disease is visible.</p>
+      </div>
+
+      <div class="flex mt-10">
+        <button
+          class="rounded text-center transition focus-visible:ring-2 ring-offset-2 ring-gray-200 px-5 py-2.5 ml-5 bg-black text-white border border-transparent flex items-center"
+          @click="retry">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+            class="w-5 h-5 mr-2">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18">
+            </path>
+          </svg>
+          Retry
+        </button>
+        <button
+          class="rounded text-center transition focus-visible:ring-2 ring-offset-2 ring-gray-200 px-5 py-2.5 ml-5 bg-white border border-black text-black flex items-center"
+          @click="refresh">
+          Refresh
+        </button>
+      </div>
     </div>
 
-    <div x-show="is_unknown" class="mt-5">
-      <p class="text-xl font-bold text-black">We can't detect the disease. Please try again. Make sure the image is
-        clear and the disease is visible.</p>
-    </div>
-
-    <div class="flex mt-10">
-      <button
-        class="rounded text-center transition focus-visible:ring-2 ring-offset-2 ring-gray-200 px-5 py-2.5 ml-5 bg-black text-white border border-transparent flex items-center"
-        @click="retry">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
-          class="w-5 h-5 mr-2">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18">
-          </path>
-        </svg>
-        Retry
-      </button>
-      <button
-        class="rounded text-center transition focus-visible:ring-2 ring-offset-2 ring-gray-200 px-5 py-2.5 ml-5 bg-white border border-black text-black flex items-center"
-        @click="refresh">
-        Refresh
-      </button>
-    </div>
-  </div>
-
-  <footer class="my-20">
-    <p class="text-sm text-center text-slate-500">
-      Copyright © 2023 Caledi. All rights reserved.
-    </p>
-    <p class="mt-1 text-xs text-center text-slate-500">
-      Made by <a href="https://hiskia.app" target="_blank" rel="noopener" class="hover:underline">
-        Hiskia Pratama
-      </a>
-    </p>
-  </footer>
+    <footer class="my-20">
+      <p class="text-sm text-center text-slate-500">
+        Copyright © 2023 Caledi. All rights reserved.
+      </p>
+      <p class="mt-1 text-xs text-center text-slate-500">
+        Made by <a href="https://hiskia.app" target="_blank" rel="noopener" class="hover:underline">
+          Hiskia Pratama
+        </a>
+      </p>
+    </footer>
 
 </body>
 
