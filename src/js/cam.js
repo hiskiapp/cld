@@ -9,25 +9,85 @@ document.addEventListener('alpine:init', () => {
     predictions: [],
     is_unknown: false,
     video: document.getElementById('main-cam'),
+    is_front_camera: false,
 
     async start() {
       this.started = true
-      const constraints = {
-        audio: false,
-        video: {
-          width: 640,
-          height: 420,
-        },
+      try {
+        await this.setupCamera()
+      } catch (e) {
+        console.error('navigator.getUserMedia error:', e)
       }
+    },
+
+    checkDevice() {
+      var userAgent = navigator.userAgent || navigator.vendor || window.opera;
+
+      if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
+        return "ios";
+      }
+
+      return "android";
+    },
+
+    async setupCamera(facingMode = 'user') {
+      if (this.checkDevice() == 'android') {
+        await this.setupCameraAndroid(facingMode);
+      } else {
+        this.setupCameraIos(facingMode);
+      }
+    },
+
+    async setupCameraAndroid(facingMode = 'environment') {
+      if (window.stream) {
+        window.stream.getTracks().forEach(track => track.stop());
+      }
+
+      let constraints = {
+        video: {
+          facingMode: facingMode,
+          width: 640,
+          height: 420
+        },
+        audio: false
+      };
 
       try {
         const stream = await navigator.mediaDevices.getUserMedia(constraints)
         window.stream = stream
         this.video.srcObject = stream
         this.video.play()
-      } catch (e) {
-        console.error('navigator.getUserMedia error:', e)
+      } catch (error) {
+        alert('You have to enable the camera');
       }
+    },
+
+    async setupCameraIos(facingMode = 'environment') {
+      const constraints = (window.constraints = {
+        audio: false,
+        video: {
+          facingMode: facingMode,
+          width: {
+            ideal: 640
+          },
+          height: {
+            ideal: 420
+          }
+        }
+      });
+
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia(constraints)
+        this.video.srcObject = stream
+      } catch (error) {
+        alert('You have to enable the camera');
+      }
+    },
+
+    switchCamera() {
+      this.is_front_camera = !this.is_front_camera
+
+      this.setupCamera(this.is_front_camera ? "user" : "environment");
     },
 
     async submit() {
