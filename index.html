@@ -43,7 +43,7 @@
   </div>
 
   <div class="max-w-screen-xl px-5 mx-auto" x-data="cam">
-    <main class="grid pt-16 pb-4 lg:grid-cols-1 place-items-center md:pt-12 md:pb-16" x-show="!started">
+    <main class="grid pt-8 pb-4 lg:grid-cols-1 place-items-center md:pb-16" x-show="!started" x-cloak>
       <div>
         <h1 class="text-3xl font-bold text-center md:text-5xl lg:text-6xl xl:text-7xl">
           Cassava Leaf Disease Classificator
@@ -52,7 +52,7 @@
           Caledi is a cassava leaf disease classificator. It uses machine learning to classify cassava leaf disease.
           Using Tensorflow and Keras, Caledi can classify cassava leaf disease up to 85% accuracy.
         </p>
-        <div class="flex flex-col gap-5 mt-6 sm:flex-row" x-show="!started">
+        <div class="flex gap-5 mt-6 flex-row items-center justify-center md:justify-start">
           <a href="https://deepnote.com/@hiskia/Cassava-Leaf-Disease-Classification-b30f11c3-2bbd-411c-b0ce-4f371d417c44"
             target="_blank" rel="noopener"
             class="rounded text-center transition focus-visible:ring-2 ring-offset-2 ring-gray-200 px-5 py-2.5 bg-black text-white border-2 border-transparent flex gap-1 items-center justify-center">
@@ -91,10 +91,10 @@
         </button>
       </div>
 
-      <div x-show="started">
+      <div x-cloak x-show="started">
         <video id="main-cam" class="w-full rounded-lg z-100" x-show="!finished"></video>
         <img :src="base64image" class="w-full rounded-lg z-100" x-show="finished" />
-        <div class="pt-6 mx-auto mt-2 text-center" x-show="!processing && !finished">
+        <div class="pt-6 mx-auto mt-2 text-center" x-cloak x-show="!processing && !finished">
           <div class="flex flex-row items-center space-x-3 justify-center">
             <button title="Switch Camera" @click="switchCamera"
               class="text-white hover:bg-white hover:text-black border border-white focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
@@ -136,7 +136,7 @@
       </div>
     </div>
 
-    <div
+    <div x-cloak
       class="flex flex-col items-center max-w-5xl p-8 mx-auto mt-10 text-center bg-white border-2 border-black rounded-lg"
       x-show="finished">
       <h2 class="text-4xl tracking-tight text-black md:text-6xl">
