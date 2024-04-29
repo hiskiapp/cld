@@ -21,5 +21,5 @@ To start the application, run the following commands:
 
 ```sh
 bun install
-bun run dev
+bun run serve
 ```
