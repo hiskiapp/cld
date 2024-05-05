@@ -60,7 +60,7 @@ export default class Caledi {
       }
     })
 
-    if (result.value < 0.5) {
+    if (result.value < 0.66) {
       result = { name: 'unknown', value: 0 }
     }
 
