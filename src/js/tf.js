@@ -1,69 +1,58 @@
-import * as tf from '@tensorflow/tfjs'
+import * as tf from '@tensorflow/tfjs';
 
 export default class Caledi {
   constructor() {
-    this.model = tf.loadLayersModel('/model/model.json')
+    this.model = tf.loadGraphModel('/model/cropnet/model.json');
     this.labels = [
-      'brown leaf spot',
-      'brown_streak_disease',
-      'green_might_damage',
-      'healthy',
-      'mosaic_disease',
-      'red_mite_damage',
-    ]
+      'Cassava Bacterial Blight',
+      'Cassava Brown Streak Disease',
+      'Cassava Green Mite',
+      'Cassava Mosaic Disease',
+      'Healthy'
+    ];
   }
 
   async processImage(base64) {
+    const img = new Image();
+    img.src = 'data:image/jpeg;base64,' + base64;
+
     return new Promise((resolve, reject) => {
-      const img = new Image()
       img.onload = () => {
-        const canvas = document.createElement('canvas')
-        canvas.width = img.width
-        canvas.height = img.height
-        const ctx = canvas.getContext('2d')
+        const canvas = document.createElement('canvas');
+        canvas.width = img.width;
+        canvas.height = img.height;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, img.width, img.height);
 
-        ctx.drawImage(img, 0, 0, img.width, img.height)
+        const input = tf.browser.fromPixels(canvas);
+        const normalized = input.resizeBilinear([224, 224]).reshape([1, 224, 224, 3]).div(255.0);
 
-        let input = tf.browser.fromPixels(canvas)
+        resolve(normalized);
+      };
 
-        const resized = tf.image.resizeBilinear(input, [300, 300])
-
-        const reshaped = resized.reshape([1, 300, 300, 3])
-
-        const normalized = reshaped.div(255.0)
-
-        resolve(normalized)
-      }
-
-      img.onerror = (error) => reject(error)
-
-      img.src = 'data:image/jpeg;base64,' + base64
-    })
+      img.onerror = (error) => reject(error);
+    });
   }
 
-  async predict(img) {
-    const model = await this.model
-    const input = await this.processImage(img)
-    const predict = model.predict(input)
-    const predictArray = await predict.data()
+  async predict(base64) {
+    const model = await this.model;
+    const input = await this.processImage(base64);
+    const predict = model.predict(input);
+    const predictArray = await predict.data();
 
-    let prediction = {}
-    let result = { name: '', value: 0 }
-
-    predictArray.forEach((element, i) => {
-      prediction[this.labels[i]] = element
-      if (element > result.value) {
-        result = {
-          name: this.labels[i],
-          value: element,
-        }
+    let result = { name: 'unknown', value: 0 };
+    const prediction = this.labels.reduce((acc, label, i) => {
+      acc[label] = predictArray[i];
+      if (predictArray[i] > result.value) {
+        result = { name: label, value: predictArray[i] };
       }
-    })
+      return acc;
+    }, {});
 
     if (result.value < 0.66) {
-      result = { name: 'unknown', value: 0 }
+      result = { name: 'unknown', value: 0 };
     }
 
-    return { prediction, result }
+    return { prediction, result };
   }
 }

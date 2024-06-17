@@ -173,9 +173,7 @@ document.addEventListener('alpine:init', () => {
 
     formatPredictions(res) {
       return Object.entries(res.prediction).map(([key, value]) => ({
-        disease: key
-          .replace(/[_-]/g, ' ')
-          .replace(/\w\S*/g, (w) => w.replace(/^\w/, (c) => c.toUpperCase())),
+        disease: key,
         accuracy: (value * 100).toFixed(2) + '%',
         is_max: res.result.name === key,
       }))
