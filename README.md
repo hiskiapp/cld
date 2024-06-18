@@ -7,7 +7,7 @@ Caledi is a cassava leaf disease classificator. It uses machine learning to clas
 - `src/js/main.js`: The entry point of the application.
 - `src/js/cam.js`: Contains the `readFileAsDataURL` function which is used to read image files.
 - `src/js/tf.js`: Contains the `Caledi` class which is used for image processing and prediction.
-- `public/model/model.json`: The machine learning model used for prediction.
+- `public/model/cropnet/model.json`: The machine learning model used for prediction.
 
 ## How to Use
 
