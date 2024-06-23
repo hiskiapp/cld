@@ -49,7 +49,7 @@ export default class Caledi {
       return acc;
     }, {});
 
-    if (result.value < 0.66) {
+    if (result.value <= 0.85) {
       result = { name: 'unknown', value: 0 };
     }
 
